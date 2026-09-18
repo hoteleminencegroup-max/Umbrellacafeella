@@ -726,8 +726,7 @@
           '<div class="field full" id="fAddrWrap" ' + (state.orderType === 'delivery' ? '' : 'hidden') + '><label for="coAddr">' + esc(t('cart.address')) + ' <span class="req">*</span></label><input id="coAddr" type="text" value="' + esc(saved.address || '') + '" placeholder="Hotel / guest house, Ella"></div>' +
           '<div class="field"><label for="coName">' + esc(t('checkout.name')) + ' <span class="req">*</span></label><input id="coName" type="text" required value="' + esc(saved.name || '') + '" autocomplete="name"></div>' +
           '<div class="field"><label for="coPhone">' + esc(t('checkout.phone')) + ' <span class="req">*</span></label><input id="coPhone" type="tel" required value="' + esc(saved.phone || '') + '" autocomplete="tel" placeholder="+94 …"></div>' +
-          '<div class="field"><label for="coTime">' + esc(t('cart.time')) + '</label><input id="coTime" type="time"></div>' +
-          '<div class="field"><label for="coEmail">' + esc(t('checkout.email')) + '</label><input id="coEmail" type="email" value="' + esc(saved.email || '') + '"></div>' +
+          '<div class="field full"><label for="coTime">' + esc(t('cart.time')) + '</label><input id="coTime" type="time"></div>' +
           '<div class="field full"><label for="coNotes">' + esc(t('checkout.notes')) + '</label><textarea id="coNotes" rows="2" placeholder="Less spicy, no onion…"></textarea></div>' +
         '</div>' +
         '<button class="btn btn-primary btn-block btn-lg" id="coSubmit" style="margin-top:14px"><svg width="18" height="18"><use href="#i-check"/></svg> ' + esc(t('checkout.submit')) + '</button>' +
@@ -783,7 +782,7 @@
       lines.push('*UMBRELLA CAFE — NEW ORDER / අලුත් ඔර්ඩර්*');
       lines.push('Order code: *' + payload.code + '*');
       lines.push('Type: ' + payload.typeLabel + (payload.table ? ' · Table ' + payload.table : '') + (payload.address ? ' · ' + payload.address : ''));
-      lines.push('Name: ' + payload.name + ' · Phone: ' + payload.phone + (payload.email ? ' · ' + payload.email : ''));
+      lines.push('Name: ' + payload.name + ' · Phone: ' + payload.phone);
       lines.push(payload.when ? 'Preferred time: ' + payload.when : 'Time: ASAP');
       lines.push('');
       lines.push('*Items:*');
@@ -801,7 +800,7 @@
     } else {
       lines.push('*UMBRELLA CAFE — TABLE BOOKING / ටේබල් බුකින්*');
       lines.push('Booking ref: *' + payload.code + '*');
-      lines.push('Name: ' + payload.name + ' · Phone: ' + payload.phone + (payload.email ? ' · ' + payload.email : ''));
+      lines.push('Name: ' + payload.name + ' · Phone: ' + payload.phone);
       lines.push('Date: ' + payload.date + ' · Time: ' + payload.time);
       lines.push('Guests: ' + payload.guests + ' · Seating: ' + payload.areaLabel);
       if (payload.occasion) lines.push('Occasion: ' + payload.occasion);
@@ -836,7 +835,7 @@
     if (!phone) { markInvalid('#coPhone'); return; }
     if (state.orderType === 'delivery' && !addr) { markInvalid('#coAddr'); return; }
 
-    save('customer', { name: name, phone: phone, email: $('#coEmail').value.trim(), address: addr });
+    save('customer', { name: name, phone: phone, address: addr });
 
     var tt = totals();
     var code = orderCode();
@@ -845,7 +844,7 @@
       code: code, type: state.orderType, typeLabel: typeLabel,
       table: $('#coTable') ? $('#coTable').value.trim() : '',
       address: addr, when: $('#coTime').value, notes: $('#coNotes').value.trim(),
-      name: name, phone: phone, email: $('#coEmail').value.trim(),
+      name: name, phone: phone,
       lang: I.getLang(), currency: C.currency,
       subtotal: tt.sub, service: tt.service, total: tt.total,
       lines: buildOrderLines('en'), linesLocal: buildOrderLines(I.getLang())
@@ -957,7 +956,7 @@
     var areaLabel = t('booking.' + (state.area === 'any' ? 'any' : state.area));
     var payload = {
       code: 'BK-' + orderCode().slice(3), name: name, phone: phone,
-      email: $('#bkEmail').value.trim(), date: date, time: time,
+      date: date, time: time,
       guests: state.guests, area: state.area, areaLabel: areaLabel,
       occasion: $('#bkOccasion').value.trim(), notes: $('#bkNotes').value.trim(),
       lang: I.getLang()

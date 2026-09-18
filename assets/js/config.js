@@ -16,7 +16,8 @@
     phoneDisplay: '+94 71 205 4801',
     phoneAlt: '+94 76 022 9717',
     whatsapp: '94712054801',          // digits only, international format
-    email: 'umbrellacafeella@gmail.com',
+    // Orders & bookings are delivered through the web panel + WhatsApp only
+    // (no public e-mail address for this cafe).
 
     /* ---- location ---- */
     address: {

@@ -25,6 +25,13 @@ HERO_QUALITY=78
 echo "☔ Umbrella Cafe — optimising images"
 
 # ---- hero banner -------------------------------------------------------
+if [ -f assets/img/hero-ella.jpg ]; then
+  size=$(stat -c%s assets/img/hero-ella.jpg 2>/dev/null || echo 0)
+  if [ "$size" -gt 262144 ]; then
+    convert assets/img/hero-ella.jpg -auto-orient -resize "$HERO_SIZE" -quality "$HERO_QUALITY" -interlace JPEG -strip assets/img/hero-ella.tmp.jpg && mv assets/img/hero-ella.tmp.jpg assets/img/hero-ella.jpg
+    echo "  ✔ hero-ella.jpg recompressed"
+  fi
+fi
 if [ -f assets/img/hero-ella.png ]; then
   convert assets/img/hero-ella.png -auto-orient -resize "$HERO_SIZE" -quality "$HERO_QUALITY" -interlace JPEG -strip assets/img/hero-ella.jpg
   rm -f assets/img/hero-ella.png
@@ -39,17 +46,23 @@ if [ -f assets/img/logo.png ]; then
   echo "  ✔ logo-512.png · logo-192.png"
 fi
 
-# ---- dish photos -------------------------------------------------------
+# ---- dish photos: PNG -> JPG, and recompress oversized JPGs ------------
 count=0
 for f in assets/img/dishes/*.png assets/img/dishes/*.PNG; do
   [ -e "$f" ] || continue
-  base="$(basename "$f")"
-  name="${base%.*}"
+  base="$(basename "$f")"; name="${base%.*}"
   convert "$f" -auto-orient -resize "$DISH_SIZE" -quality "$DISH_QUALITY" -interlace JPEG -strip "assets/img/dishes/${name}.jpg"
-  rm -f "$f"
-  count=$((count + 1))
+  rm -f "$f"; count=$((count + 1))
 done
-echo "  ✔ ${count} dish image(s) converted to JPG"
+for f in assets/img/dishes/*.jpg; do
+  [ -e "$f" ] || continue
+  size=$(stat -c%s "$f" 2>/dev/null || echo 0)
+  if [ "$size" -gt 184320 ]; then          # > 180 KB -> shrink again
+    convert "$f" -auto-orient -resize "$DISH_SIZE" -quality "$DISH_QUALITY" -interlace JPEG -strip "${f}.tmp.jpg" && mv "${f}.tmp.jpg" "$f"
+    count=$((count + 1))
+  fi
+done
+echo "  ✔ ${count} dish image(s) optimised"
 
 # ---- report ------------------------------------------------------------
 echo ""

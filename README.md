@@ -19,7 +19,7 @@ A complete, mobile-first **restaurant website + web panel** for **Umbrella Cafe*
 | **Address** | Passara Road, 3rd Mile Post, Ella 90090, Uva Province, Sri Lanka |
 | **Coordinates** | 6.872309, 81.05567 |
 | **Phone** | +94 71 205 4801 (main) · +94 76 022 9717 (alt) |
-| **WhatsApp** | +94 71 205 4801 (`wa.me/94712054801`) |
+| **WhatsApp** | +94 71 205 4801 (`wa.me/94712054801`) — the only notification channel |
 | **Instagram** | [@cafe_umbrella_](https://www.instagram.com/cafe_umbrella_) |
 | **Facebook** | [profile.php?id=61573828236464](https://www.facebook.com/profile.php?id=61573828236464) |
 | **Google Maps** | [share.google/cYiIixkUGF5D3pMt7](https://share.google/cYiIixkUGF5D3pMt7) |
@@ -76,7 +76,7 @@ PIN-protected, auto-refreshes every 25 s, keyboard shortcuts `1–5` to jump bet
 
 1. Guest taps a dish → card with options (small/big pot, pancake topping) or add-ons (chicken curry, baby jackfruit curry) opens a chooser with quantity and live price.
 2. Basket drawer shows lines, subtotal, **service charge 10 %**, total.
-3. Checkout: dine-in (table no.) / takeaway / delivery (address), preferred time, name, phone, e-mail, kitchen notes.
+3. Checkout: dine-in (table no.) / takeaway / delivery (address), preferred time, name, phone/WhatsApp, kitchen notes. **No e-mail is used** — notifications go to the web panel and to WhatsApp.
 4. On submit the order is **saved to the panel API** *and* a pre-filled **WhatsApp message** opens to the cafe with the full order, totals and order code (e.g. `UC-K7M2Q`).
 5. Bookings work the same way and produce a reference like `BK-4RT8N`.
 
@@ -138,22 +138,15 @@ AI-generated 3D food renders live in `assets/img/` and `assets/img/dishes/` as o
 While a dish photo is missing, the card shows a **themed placeholder tile** (category-tinted green/blue/yellow gradient + the dish emoji), so the site never looks broken. To use your own photos, drop files into `assets/img/dishes/` using these names:
 
 ```
-roti-veg · roti-cheese · roti-mushroom · roti-hawaiian · roti-chicken · roti-sausage
-kottu-veg · kottu-mushroom · kottu-chicken · kottu-special
+roti-veg · roti-cheese · roti-mushroom · roti-hawaiian · roti-chicken
+kottu-veg · kottu-chicken · kottu-special
 rice-curry · coconut-roti · veg-fried-rice · fried-rice · pepper-chicken
-chopsey · chopsey-veg · chopsey-prawns
-soup · soup-veg · soup-curry-leaf · soup-chicken · soup-corn · soup-noodle
-starters · wedges · buttered-mushroom · papadam
-omelette · omelette-mushroom · omelette-sausage · omelette-chicken · omelette-special
-boiled-veg · boiled-chicken · boiled-prawns
-pancakes · pancake-coconut · choc-pancake · special-pancake · special-pancake-cheese
-fruit-salad · icecream · icecream-scoop · icecream-choc · curd-kithul
-juice · juice-lime · juice-pineapple · juice-mango · juice-watermelon · juice-papaya
-lassi · lassi-banana · lassi-mango · lassi-papaya
-milkshake · milkshake-vanilla · milkshake-strawberry · milkshake-banana
-tea · tea-healthy · coffee · iced-tea · iced-drinks
-soft-drinks · cola · sprite · ginger-beer · soda            (.jpg or .png — run `bash tools/optimize-images.sh` to convert & compress)
+chopsey · soup · starters · omelette · boiled
+pancakes · choc-pancake · sweet-corner · icecream
+juice · lassi · milkshake · tea · coffee · iced · softdrinks      (.jpg, 900×900)
 ```
+
+29 photos cover all 70 dishes: similar items share one shot (every soup uses `soup.jpg`, every juice `juice.jpg`, …) while the dish's own emoji badge keeps the cards distinct. Swap any of them for a real photo of your plate and it appears instantly.
 
 ---
 
