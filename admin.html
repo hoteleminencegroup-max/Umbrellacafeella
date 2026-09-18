@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#06251c">
+<meta name="robots" content="noindex, nofollow">
+<title>☔ Umbrella Cafe · Web Panel</title>
+<link rel="icon" type="image/svg+xml" href="assets/img/logo.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/admin.css">
+</head>
+<body>
+
+<!-- ══════════════════ PIN GATE ══════════════════ -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <img src="assets/img/logo.svg" alt="Umbrella Cafe">
+    <h1>Umbrella Cafe · Web Panel</h1>
+    <p>Orders, table bookings &amp; menu control — Passara Road, Ella</p>
+    <form id="gateForm" autocomplete="off">
+      <div class="pin-field"><input id="pinInput" type="password" inputmode="numeric" placeholder="••••" maxlength="12" aria-label="Admin PIN"></div>
+      <div class="gate-error" id="gateError" role="alert"></div>
+      <button class="btn btn-g btn-block" type="submit" style="padding:13px">🔓 Unlock panel</button>
+    </form>
+    <p class="gate-hint">Default PIN <code>2024</code> — change it in <b>Settings</b>.<br>Set <code>UC_ADMIN_PIN</code> in the server environment to override.</p>
+    <p class="gate-hint" style="margin-top:14px"><a href="index.html">← Back to the website</a></p>
+  </div>
+</div>
+
+<!-- ══════════════════ PANEL ══════════════════ -->
+<div class="shell" id="shell" hidden>
+  <div class="scrim" id="scrim"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="side-brand">
+      <img src="assets/img/logo.svg" alt="">
+      <div><strong>Umbrella Cafe</strong><span>Web Panel</span></div>
+    </div>
+
+    <button class="side-link on" data-view="dashboard"><span class="ico">📊</span> Dashboard</button>
+    <button class="side-link" data-view="orders"><span class="ico">🧾</span> Orders <span class="badge" id="badgeOrders" hidden>0</span></button>
+    <button class="side-link" data-view="bookings"><span class="ico">📅</span> Bookings <span class="badge" id="badgeBookings" hidden>0</span></button>
+    <button class="side-link" data-view="menu"><span class="ico">🍽️</span> Menu &amp; Prices</button>
+    <button class="side-link" data-view="settings"><span class="ico">⚙️</span> Settings</button>
+
+    <div class="side-foot">
+      <a href="index.html">🌐 View website</a>
+      <a href="https://wa.me/94712054801" target="_blank" rel="noopener">💬 WhatsApp cafe</a>
+      <button id="btnRefresh">🔄 Refresh data</button>
+      <button id="btnLogout">🔒 Lock panel</button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="btn btn-o btn-sm burger-admin" id="burgerAdmin" aria-label="Menu">☰</button>
+      <h1 id="viewTitle">Dashboard</h1>
+      <span class="pill" id="apiPill"><span class="dot"></span> checking…</span>
+      <span class="pill ok" id="clockPill">—</span>
+      <button class="btn btn-y btn-sm" id="btnPrint">🖨️ Print</button>
+    </div>
+
+    <div class="banner info" id="modeBanner" hidden></div>
+
+    <!-- dashboard -->
+    <section id="view-dashboard">
+      <div class="stat-cards" id="statCards"></div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>📈 Last 7 days <span class="sub" id="chartSub"></span></h3>
+          <div class="chart" id="chart"></div>
+        </div>
+        <div class="card">
+          <h3>🔥 Top sellers</h3>
+          <div class="top-list" id="topList"></div>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="card">
+          <h3>🧾 Newest orders <span class="sub"><a href="#" data-goto="orders">view all →</a></span></h3>
+          <div id="dashOrders"></div>
+        </div>
+        <div class="card">
+          <h3>📅 Upcoming bookings <span class="sub"><a href="#" data-goto="bookings">view all →</a></span></h3>
+          <div id="dashBookings"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- orders -->
+    <section id="view-orders" hidden>
+      <div class="tabs" id="orderTabs"></div>
+      <div class="toolbar">
+        <input type="search" id="orderSearch" placeholder="Search code, name, phone, table…">
+        <select id="orderSort">
+          <option value="new">Newest first</option>
+          <option value="old">Oldest first</option>
+          <option value="total">Highest total</option>
+        </select>
+        <button class="btn btn-o btn-sm" id="exportOrders">⬇️ Export CSV</button>
+      </div>
+      <div id="orderList"></div>
+    </section>
+
+    <!-- bookings -->
+    <section id="view-bookings" hidden>
+      <div class="tabs" id="bookingTabs"></div>
+      <div class="toolbar">
+        <input type="search" id="bookingSearch" placeholder="Search name, phone, code…">
+        <select id="bookingSort">
+          <option value="date">By date &amp; time</option>
+          <option value="new">Newest first</option>
+        </select>
+        <button class="btn btn-o btn-sm" id="exportBookings">⬇️ Export CSV</button>
+      </div>
+      <div id="bookingList"></div>
+    </section>
+
+    <!-- menu editor -->
+    <section id="view-menu" hidden>
+      <div class="banner info">💡 Changes here apply instantly to the public menu: adjust a price or mark a dish <b>sold out</b> for today. The base menu lives in <code>assets/js/menu-data.js</code>.</div>
+      <div class="toolbar">
+        <input type="search" id="menuSearchAdmin" placeholder="Search dishes…">
+        <select id="menuCatAdmin"></select>
+        <button class="btn btn-o btn-sm" id="onlyChanged">Only changed</button>
+        <button class="btn btn-g btn-sm" id="saveOverrides" style="margin-left:auto">💾 Save changes</button>
+        <button class="btn btn-o btn-sm" id="resetOverrides">↺ Reset all</button>
+      </div>
+      <div class="menu-editor" id="menuEditor"></div>
+    </section>
+
+    <!-- settings -->
+    <section id="view-settings" hidden>
+      <div class="grid-2">
+        <div class="card">
+          <h3>🏪 Cafe profile</h3>
+          <div id="profileBox"></div>
+        </div>
+        <div class="card">
+          <h3>⚙️ Kitchen &amp; commerce</h3>
+          <div class="set-grid" id="setGrid"></div>
+          <div style="margin-top:14px">
+            <div class="set-row">
+              <div class="t"><b>Accepting online orders</b><small>Turn off to pause new orders (customers are told to call).</small></div>
+              <button class="switch" id="swOrders" aria-label="Accept orders"></button>
+            </div>
+            <div class="set-row">
+              <div class="t"><b>Accepting table bookings</b><small>Turn off to pause reservations.</small></div>
+              <button class="switch" id="swBookings" aria-label="Accept bookings"></button>
+            </div>
+          </div>
+          <button class="btn btn-g btn-block" id="saveSettings" style="margin-top:14px">💾 Save settings</button>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <h3>🔐 Panel PIN</h3>
+          <div class="set-grid">
+            <div class="set-field"><label for="newPin">New PIN (min 4 digits)</label><input id="newPin" type="password" inputmode="numeric" maxlength="12" placeholder="••••"></div>
+            <div class="set-field"><label for="newPin2">Repeat PIN</label><input id="newPin2" type="password" inputmode="numeric" maxlength="12" placeholder="••••"></div>
+          </div>
+          <button class="btn btn-y" id="savePin" style="margin-top:14px">Change PIN</button>
+          <p style="font-size:12.6px;color:var(--ink-soft);margin:12px 0 0">For stronger security set <code>UC_ADMIN_PIN</code> as a server environment variable — it always overrides the stored PIN.</p>
+        </div>
+        <div class="card">
+          <h3>🗄️ Data</h3>
+          <p style="font-size:13.6px;color:var(--ink-soft)">Orders and bookings are stored as JSON in <code>data/</code> on the server. Export a CSV backup at any time.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+            <button class="btn btn-o btn-sm" id="dlOrders">⬇️ Orders CSV</button>
+            <button class="btn btn-o btn-sm" id="dlBookings">⬇️ Bookings CSV</button>
+            <button class="btn btn-o btn-sm" id="dlJSON">⬇️ Raw JSON</button>
+          </div>
+          <h3 style="margin-top:20px">🔗 Useful links</h3>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <a class="btn btn-o btn-sm" href="index.html">🌐 Website</a>
+            <a class="btn btn-o btn-sm" href="api/health" target="_blank" rel="noopener">🩺 API health</a>
+            <a class="btn btn-o btn-sm" href="https://www.instagram.com/cafe_umbrella_" target="_blank" rel="noopener">📷 Instagram</a>
+            <a class="btn btn-o btn-sm" href="https://www.facebook.com/profile.php?id=61573828236464" target="_blank" rel="noopener">📘 Facebook</a>
+            <a class="btn btn-o btn-sm" href="https://share.google/cYiIixkUGF5D3pMt7" target="_blank" rel="noopener">📍 Google Maps</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script src="assets/js/config.js"></script>
+<script src="assets/js/i18n.js"></script>
+<script src="assets/js/menu-data.js"></script>
+<script src="assets/js/admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+{
+  "name": "Umbrella Cafe Ella — Roti & Kottu Hub",
+  "short_name": "Umbrella Cafe",
+  "description": "Order roti, kottu and Sri Lankan rice & curry online, or book a table with a mountain view. Menu in English, Français, Русский, Deutsch.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f5fbf8",
+  "theme_color": "#12805c",
+  "lang": "en",
+  "dir": "ltr",
+  "categories": [
+    "food",
+    "restaurant",
+    "travel"
+  ],
+  "icons": [
+    {
+      "src": "assets/img/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/logo-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "assets/img/logo-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Menu & Order",
+      "url": "./index.html#menu",
+      "description": "Browse the 3D menu panel and order"
+    },
+    {
+      "name": "Book a Table",
+      "url": "./index.html#booking",
+      "description": "Reserve a table with a mountain view"
+    },
+    {
+      "name": "Web Panel",
+      "url": "./admin.html",
+      "description": "Orders, bookings and menu management"
+    }
+  ]
+}
