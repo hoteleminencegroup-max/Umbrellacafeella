@@ -1,0 +1,36 @@
+{
+  "name": "umbrella-cafe-ella",
+  "version": "1.0.0",
+  "description": "Umbrella Cafe Ella - The Umbrella Ella Roti & Kottu Hub. Multilingual (EN/FR/RU/DE) restaurant website, 3D menu panel, online ordering, table booking and admin web panel.",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node server/index.js",
+    "serve": "node server/index.js",
+    "test": "node tests/smoke.mjs && node tests/admin.mjs",
+    "test:site": "node tests/smoke.mjs",
+    "test:admin": "node tests/admin.mjs",
+    "seed": "node server/seed.js"
+  },
+  "keywords": [
+    "umbrella-cafe",
+    "ella",
+    "sri-lanka",
+    "restaurant",
+    "menu",
+    "kottu",
+    "roti",
+    "ordering",
+    "booking",
+    "admin-panel",
+    "multilingual"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "jsdom": "^27.0.0"
+  }
+}
